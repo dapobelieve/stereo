@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { KnexModule } from "nestjs-knex";
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -12,8 +11,9 @@ import { KnexModule } from "nestjs-knex";
         connection: process.env.DB_URL,
       },
     }),
+    MediaModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

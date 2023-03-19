@@ -11,7 +11,7 @@ services:
       stereo-db:
         condition: service_healthy
     ports:
-      - ${PORT:-4000}:4000
+      - ${PORT}:${PORT}
     volumes:
       - .:/usr/src/app/
       - /usr/src/app/node_modules
