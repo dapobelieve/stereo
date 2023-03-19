@@ -1,0 +1,45 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    container_name: stereo-api
+    image: stereo-api
+    depends_on:
+      stereo-db:
+        condition: service_healthy
+    ports:
+      - ${PORT:-4000}:4000
+    volumes:
+      - .:/usr/src/app/
+      - /usr/src/app/node_modules
+    networks:
+      - stereo-vpc
+
+  stereo-db:
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
+    container_name: st-db
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./mysql-files:/var/lib/mysql-files
+    environment:
+      MYSQL_DATABASE: media
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - stereo-vpc
+
+networks:
+  stereo-vpc:
+    external: true
