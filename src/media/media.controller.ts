@@ -30,6 +30,15 @@ export class MediaController {
     }
   }
 
+  @Get('/search')
+  async search(@Query() queryParams) {
+    const {query}= queryParams
+    let mediaFiles = await this.mediaService.search(query);
+    return {
+      data: mediaFiles
+    }
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const file = await this.mediaService.findOne(id);

@@ -37,7 +37,12 @@ export class MediaService {
     })
     return id
   }
-
+  async search(query) {
+    return await this.knex.table('media').where(function () {
+      this.where('name', 'like', `%${query}%`)
+        .orWhere('description', 'like', `%${query}%`)
+    })
+  }
   async findAll(page, limit) {
     return await this.knex.whereNull('deletedAt').select("*").from('media').limit(limit).offset(page)
   }
